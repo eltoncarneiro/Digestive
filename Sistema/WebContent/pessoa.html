@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html ng-app="pessoaModulo">
+<head>
+	<meta charset="ISO-8859-1">
+	<title>Cadastro Pessoa</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<link rel="stylesheet" href="css/materialize.min.css">
+	<link rel="icon" href="imagens/favicon-hi.png">
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/carousel.css" rel="stylesheet">
+</head>
+<body ng-controller="pessoaController">
+<header class="container">
+	<h2 ng-bind="titulo"></h2>
+</header>
+<div class="container">
+<form>
+  <div class="form-group">
+    <label for="codigo">Codigo</label>
+    <input type="text" class="form-control" ng-model="selecionaPessoas.codigo" id="codigo" aria-describedby="codigo" placeholder="Aguardando . . . .">
+  </div>
+  <div class="form-group">
+    <label for="status">Status</label>
+    <select class="form-control" ng-model="curso.status" ng-options="status.descricao for status in status track by status.codigo">
+    </select> 
+  </div>
+  <div align="left" class="form-group">
+  <button type="submit" ng-click="limparCampos()" class="btn btn-secundary">Novo</button>
+   <button type="submit" ng-disabled="!selecionaPessoas.status" ng-click="salvar()" class="btn btn-info">Salvar</button>
+    <button type="submit" ng-click="excluir()" class="btn btn-danger">Excluir</button>
+    </div>
+</form>
+<footer class="container">		
+			<p class="float-right"><a class="btn btn-secondary" href="index.html" role="button">Voltar</a>
+			</p>
+			<p>&copy; 2018 - Elton Carneiro de Souza</p>
+		</footer>
+<br>
+<main class="container">
+	<div class="row">
+		<input type="text" ng-model="busca" placeholder="Busca">
+		
+		<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Pesquisa</button>
+	</div>
+<table class="table table-striped table-hover">
+	<thead>
+		<tr>
+			<th>Codigo</th>
+			<th>Status</th>
+		</tr>
+		<tbody>
+			<tr ng-repeat="pessoa in pessoa | filter:busca" ng-click="selecionaPessoa(pessoa)">
+				<td>{{pessoa.codigo}}</td>
+				<td>{{pessoa.status.descricao}}</td>
+			</tr>
+		</tbody>
+	</thead>
+</table>
+</main>
+</div>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script src="js/materialize.min.js"></script>
+<script src="lib/angular.min.js"></script>
+<script type="text/javascript">
+	angular.module("pessoaModulo",[])
+	.controller("pessoaController",function ($scope) {
+		$scope.titulo = "Cadastro de Pessoa";
+		
+		$scope.status = [
+			{codigo:1,descricao:"Ativo"},
+			{codigo:2,descricao:"Inativo"},
+			{codigo:3,descricao:"Bloqueado"}
+			];
+
+		$scope.pessoa = [
+			{codigo:1,status:{codigo:1,descricao:"Ativo"}},
+			{codigo:2,status:{codigo:2,descricao:"Inativo"}},
+			{codigo:3,status:{codigo:3,descricao:"Bloqueado"}}
+			];
+		
+	$scope.selecionaPessoa =  function(pessoaSelecionado){ 
+			$scope.selecionaPessoas = pessoaSelecionado;
+		}
+
+	$scope.limparCampos = function(){ 
+			$scope.selecionaPessoas = "";
+		}				
+
+	$scope.salvar =function(){
+		$scope.pessoa.push($scope.selecionaPessoas);
+		$scope.limparCampos();
+		}
+	
+	$scope.excluir = function(){ 
+		$scope.pessoa.splice($scope.pessoa.indexOf($scope.selecionaPessoas),1);
+		$scope.limparCampos();
+		}
+	})
+</script>
+</body>
+</html>
